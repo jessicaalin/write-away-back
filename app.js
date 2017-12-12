@@ -1,14 +1,16 @@
 const express      = require('express');
 const path         = require('path');
-const favicon      = require('serve-favicon');
 const logger       = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser   = require('body-parser');
 const cors         = require('cors');
+const session      = require('express-session');
+const passport     = require('passport');
 
 require("dotenv").config();
 
 require("./config/mongoose-setup");
+require("./config/passport-setup");
 
 const app = express();
 
@@ -23,6 +25,8 @@ app.use(
     origin: ['http://localhost/4200']
   })
 );
+app.use(passport.initialize());
+app.use(passport.session());
 
 
 // ROUTERS
