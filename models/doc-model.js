@@ -4,6 +4,9 @@ const Schema = mongoose.Schema;
 
 const docSchema = new Schema (
   {
+    title: {
+      type: String
+    },
     text: {
       type: String
     }

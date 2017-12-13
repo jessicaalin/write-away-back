@@ -5,6 +5,11 @@ const Doc = require("../models/doc-model");
 const router = express.Router();
 
 router.get("/dashboard", (req, res, next) => {
+  // if (req.user === undefined) {
+  //   res.status(400).json({ error: "Not logged in." });
+  //   return;
+  // }
+
   Doc
     .find()
     .exec()
@@ -50,7 +55,7 @@ router.get("/doc/:id", (req, res, next) => {
         res.status(400).json({ error: "Doc not found." });
       }
       else {
-        res.status(200).json(phoneFromDb);
+        res.status(200).json(docFromDb);
       }
     })
     .catch((err) => {
@@ -60,16 +65,23 @@ router.get("/doc/:id", (req, res, next) => {
     });
 });
 
-router.put("/doc/:id", (req, res, next) => {
+router.patch("/doc/:id", (req, res, next) => {
   Doc.findById(req.params.id)
     .then((docFromDb) => {
       if (docFromDb === null ) {
         res.status(400).json({ error: "Doc not found." });
         return;
       }
-      docFromDb.set({
-        text: req.body.text
-      });
+      if (req.body.title ) {
+        docFromDb.set({
+          title: req.body.title
+        });
+      }
+      if (req.body.text) {
+        docFromDb.set({
+          text: req.body.text
+        });
+      }
       return docFromDb.save();
     })
     .then((docFromDb) => {
