@@ -5,10 +5,11 @@ const Doc = require("../models/doc-model");
 const router = express.Router();
 
 router.get("/dashboard", (req, res, next) => {
-  // if (req.user === undefined) {
-  //   res.status(400).json({ error: "Not logged in." });
-  //   return;
-  // }
+  if (req.user === undefined) {
+    res.status(400).json({ error: "Not logged in." });
+    console.log('Not logged in.');
+    return;
+  }
 
   Doc
     .find()
@@ -45,10 +46,10 @@ router.post("/doc", (req, res, next) => {
 });
 
 router.get("/doc/:id", (req, res, next) => {
-  // if (req.user === undefined) {
-  //   res.status(400).json({ error: "Not logged in." });
-  //   return;
-  // }
+  if (req.user === undefined) {
+    res.status(400).json({ error: "Not logged in." });
+    return;
+  }
   Doc.findById(req.params.id)
     .then((docFromDb) => {
       if (docFromDb === null ) {
@@ -72,6 +73,7 @@ router.patch("/doc/:id", (req, res, next) => {
         res.status(400).json({ error: "Doc not found." });
         return;
       }
+      console.log(req.body);
       if (req.body.title ) {
         docFromDb.set({
           title: req.body.title
@@ -100,10 +102,10 @@ router.patch("/doc/:id", (req, res, next) => {
 });
 
 router.delete("/doc/:id", (req, res, next) => {
-  // if (req.user === undefined) {
-  //   res.status(400).json({ error: "Not logged in." });
-  //   return;
-  // }
+  if (req.user === undefined) {
+    res.status(400).json({ error: "Not logged in." });
+    return;
+  }
   Doc.findByIdAndRemove(req.params.id)
     .then((docFromDb) => {
       if (docFromDb === null) {

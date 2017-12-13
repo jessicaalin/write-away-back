@@ -25,6 +25,13 @@ app.use(
     origin: ['http://localhost:4200']
   })
 );
+app.use(
+  session({
+    resave: true,
+    saveUninitialized: true,
+    secret: 'blahsecretblah189463729'
+  })
+);
 app.use(passport.initialize());
 app.use(passport.session());
 
