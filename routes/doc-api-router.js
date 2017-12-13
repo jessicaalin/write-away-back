@@ -4,7 +4,7 @@ const Doc = require("../models/doc-model");
 
 const router = express.Router();
 
-router.get("/doc", (req, res, next) => {
+router.get("/dashboard", (req, res, next) => {
   Doc
     .find()
     .exec()
