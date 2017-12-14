@@ -24,26 +24,6 @@ router.get("/dashboard", (req, res, next) => {
     });
 });
 
-router.post("/doc", (req, res, next) => {
-  const theDoc = new Doc ({
-    text: req.body.text
-  });
-
-  theDoc.save()
-  .then(() => {
-    res.status(200).json(theDoc);
-  })
-  .catch((err) => {
-    console.log("POST /docs ERROR");
-    console.log(err);
-    if (err.errors) {
-      res.status(400).json(err.errors);
-    }
-    else {
-      res.status(500).json({error: "Doc save database error."});
-    }
-  });
-});
 
 router.get("/doc/:id", (req, res, next) => {
   if (req.user === undefined) {
@@ -66,7 +46,64 @@ router.get("/doc/:id", (req, res, next) => {
     });
 });
 
-router.patch("/doc/:id", (req, res, next) => {
+router.patch("/doc/new/", (req, res, next) => {
+  const theDoc = new Doc ({
+    title: req.body.title
+  });
+
+  theDoc.save()
+  .then(() => {
+    res.status(200).json(theDoc);
+  })
+  .catch((err) => {
+    console.log("POST /docs ERROR");
+    console.log(err);
+    if (err.errors) {
+      res.status(400).json(err.errors);
+    }
+    else {
+      res.status(500).json({error: "Doc save database error."});
+    }
+  });
+});
+
+router.patch("/doc/edit/title/:id", (req, res, next) => {
+  Doc.findById(req.params.id)
+    .then((docFromDb) => {
+      if (docFromDb === null ) {
+        res.status(400).json({ error: "Doc not found." });
+        return;
+      }
+      console.log(req.body);
+      if (req.body.title ) {
+        docFromDb.set({
+          title: req.body.title
+        });
+      }
+      if (req.body.text) {
+        docFromDb.set({
+          text: req.body.text
+        });
+      }
+      return docFromDb.save();
+    })
+    .then((docFromDb) => {
+      res.status(200).json(docFromDb);
+    })
+    .catch((err) => {
+      console.log("PUT /doc/:id ERROR!");
+      console.log(err);
+      if (err.errors) {
+        res.status(400).json(err.errors);
+      }
+      else {
+        res.status(500).json({ error: "Doc update database error." });
+      }
+    });
+});
+
+
+router.patch("/doc/edit/text/:id", (req, res, next) => {
   Doc.findById(req.params.id)
     .then((docFromDb) => {
       if (docFromDb === null ) {
