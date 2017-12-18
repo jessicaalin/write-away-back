@@ -43,5 +43,9 @@ app.use('/api', docApi);
 const userApi = require('./routes/user-api-router');
 app.use('/api', userApi);
 
+// DEPLOYMENT
+app.use((req, res, next) => {
+        res.sendFile(__dirname + '/public/index.html' );
+});
 
 module.exports = app;
