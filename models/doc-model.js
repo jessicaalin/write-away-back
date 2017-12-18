@@ -4,6 +4,9 @@ const Schema = mongoose.Schema;
 
 const docSchema = new Schema (
   {
+    author: {
+      type: Schema.Types.ObjectId
+    },
     title: {
       type: String
     },

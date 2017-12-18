@@ -12,7 +12,15 @@ router.get("/dashboard", (req, res, next) => {
   }
 
   Doc
-    .find()
+    .find({ $or:
+      [
+        {title: "Read Me"},
+        // Why doesn't this work?
+        // {_id: ObjectId("5a342ab48502f505c66e156e")},
+        {author: req.user._id}
+      ]
+    })
+    .sort({updatedAt: -1})
     .exec()
     .then((docResults) => {
       res.status(200).json(docResults);
@@ -48,7 +56,8 @@ router.get("/doc/:id", (req, res, next) => {
 
 router.patch("/doc/new/", (req, res, next) => {
   const theDoc = new Doc ({
-    title: req.body.title
+    title: req.body.title,
+    author: req.user._id
   });
 
   theDoc.save()
