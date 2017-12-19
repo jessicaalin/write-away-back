@@ -15,8 +15,6 @@ router.get("/dashboard", (req, res, next) => {
     .find({ $or:
       [
         {title: "Read Me"},
-        // Why doesn't this work?
-        // {_id: ObjectId("5a342ab48502f505c66e156e")},
         {author: req.user._id}
       ]
     })
@@ -30,6 +28,7 @@ router.get("/dashboard", (req, res, next) => {
       console.log(err);
       res.status(500).json({error: "Doc list database error."});
     });
+
 });
 
 
